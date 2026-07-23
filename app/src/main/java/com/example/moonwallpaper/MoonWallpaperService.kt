@@ -283,11 +283,13 @@ class MoonWallpaperService : WallpaperService() {
         }
 
         private fun getSunEclipticLongitude(now: LocalDateTime): Double {
-            // 使用 commons-suncalc 内部方法计算太阳黄经
+            // 使用 commons-suncalc 计算太阳黄经
+            // Sun.positionEquatorial() 返回黄道坐标：
+            //    pos.phi = 黄经 (Ecliptic Longitude, 弧度)
+            //    pos.theta = 黄纬 (Ecliptic Latitude, 弧度)
             val zdt = now.atZone(ZoneId.systemDefault())
             val jd = JulianDate(zdt)
-            val pos = Sun.position(jd)
-            // getPhi() 返回黄道经度（弧度），转为角度
+            val pos = Sun.positionEquatorial(jd)
             return Math.toDegrees(pos.phi)
         }
 
